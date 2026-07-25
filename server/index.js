@@ -19,12 +19,6 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 /**
  * POST /api/audit
  * Body: { "url": "https://example.com" }
- *
- * Responses:
- *   200 – Successful audit
- *   400 – Malformed URL or non-HTML content type
- *   504 – Request timeout
- *   500 – Unexpected server error
  */
 app.post('/api/audit', async (req, res) => {
   const { url } = req.body;
@@ -42,7 +36,6 @@ app.post('/api/audit', async (req, res) => {
     const result = await auditUrl(url);
     return res.status(200).json({ success: true, url, data: result });
   } catch (err) {
-    // Structured error codes from auditor.js
     switch (err.code) {
       case 'TIMEOUT':
         return res.status(504).json({
@@ -72,9 +65,14 @@ app.post('/api/audit', async (req, res) => {
   }
 });
 
-// ─── 404 Fallback ────────────────────────────────────────────────────────────
-app.use((req, res) => {
+// ─── 404 Fallback for unhandled API routes ──────────────────────────────────
+app.use('/api', (req, res) => {
   res.status(404).json({ error: 'NOT_FOUND', message: 'Route not found.' });
+});
+
+// ─── Static Fallback ────────────────────────────────────────────────────────
+app.use((req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });
 
 // ─── Global Error Handler ────────────────────────────────────────────────────
@@ -88,11 +86,10 @@ app.use((err, req, res, _next) => {
 });
 
 // ─── Start ───────────────────────────────────────────────────────────────────
-// Only listen when this module is the entry point (not when required by tests)
 if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`\n🚀 Page Pulse running at http://localhost:${PORT}\n`);
   });
 }
 
-module.exports = app; // Export for supertest integration tests
+module.exports = app;
