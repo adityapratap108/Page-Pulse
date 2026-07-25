@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page Pulse — Instant SEO & Web Audit Tool</title>
+  <meta name="description" content="Page Pulse is a lightweight, real-time SEO audit tool. Enter any URL to instantly analyze title, meta description, H1 tags, image accessibility, word count, and more." />
+  <meta name="keywords" content="SEO audit, page analysis, web audit tool, meta description checker, H1 counter, image alt text" />
+  <meta property="og:title" content="Page Pulse — Instant SEO & Web Audit Tool" />
+  <meta property="og:description" content="Audit any web page in seconds. Get actionable SEO metrics instantly." />
+  <meta property="og:type" content="website" />
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Preconnect for Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- Favicon: inline SVG data URI -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📡</text></svg>" />
+</head>
+<body>
+  <div class="app-wrapper" role="main">
+
+    <!-- ═══ HEADER / HERO ═══════════════════════════════════════════════════ -->
+    <header class="site-header">
+      <div class="header-inner">
+        <div class="logo-badge" aria-label="Page Pulse — live audit tool">
+          <span class="pulse-dot" aria-hidden="true"></span>
+          Page Pulse
+        </div>
+
+        <h1 class="hero-title">Audit Any Page<br/>Instantly</h1>
+        <p class="hero-subtitle">
+          Enter a URL and get a comprehensive SEO snapshot in seconds —
+          title, meta description, headings, image accessibility, word count, and more.
+        </p>
+
+        <!-- Audit Form -->
+        <form class="audit-form" id="audit-form" novalidate aria-label="URL audit form">
+          <div class="input-wrapper">
+            <svg class="input-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input
+              id="url-input"
+              class="url-input"
+              type="url"
+              name="url"
+              placeholder="https://example.com"
+              autocomplete="url"
+              spellcheck="false"
+              aria-label="Website URL to audit"
+              aria-describedby="url-hint"
+              required
+            />
+          </div>
+          <button
+            id="audit-btn"
+            class="audit-btn"
+            type="submit"
+            aria-live="polite"
+            aria-busy="false"
+          >
+            <!-- Default icon -->
+            <svg class="btn-icon" id="btn-icon-default" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/>
+            </svg>
+            <!-- Spinner (hidden by default) -->
+            <svg class="btn-icon spinner" id="btn-icon-spinner" aria-hidden="true" style="display:none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12a9 9 0 11-6.219-8.56"/>
+            </svg>
+            <span id="btn-text">Audit</span>
+          </button>
+        </form>
+        <span id="url-hint" class="sr-only">Enter a full URL starting with http:// or https://</span>
+      </div>
+    </header>
+
+    <!-- ═══ MAIN CONTENT ════════════════════════════════════════════════════ -->
+    <main id="main-content">
+
+      <!-- Error Banner -->
+      <div class="error-banner" id="error-banner" role="alert" aria-atomic="true">
+        <svg class="error-banner-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <div class="error-banner-content">
+          <div class="error-banner-title" id="error-title">Error</div>
+          <div class="error-banner-message" id="error-message">An error occurred.</div>
+        </div>
+        <button class="error-banner-close" id="error-close" aria-label="Dismiss error">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <!-- Skeleton Loader -->
+      <section class="skeleton-grid" id="skeleton-grid" aria-label="Loading audit results" aria-busy="true">
+        <div class="skeleton-card">
+          <div class="skeleton-line icon"></div>
+          <div class="skeleton-line narrow"></div>
+          <div class="skeleton-line tall"></div>
+          <div class="skeleton-line wide"></div>
+        </div>
+        <div class="skeleton-card">
+          <div class="skeleton-line icon"></div>
+          <div class="skeleton-line narrow"></div>
+          <div class="skeleton-line tall"></div>
+          <div class="skeleton-line medium"></div>
+        </div>
+        <div class="skeleton-card">
+          <div class="skeleton-line icon"></div>
+          <div class="skeleton-line narrow"></div>
+          <div class="skeleton-line tall"></div>
+          <div class="skeleton-line wide"></div>
+        </div>
+        <div class="skeleton-card">
+          <div class="skeleton-line icon"></div>
+          <div class="skeleton-line narrow"></div>
+          <div class="skeleton-line tall"></div>
+          <div class="skeleton-line medium"></div>
+        </div>
+        <div class="skeleton-card">
+          <div class="skeleton-line icon"></div>
+          <div class="skeleton-line narrow"></div>
+          <div class="skeleton-line tall"></div>
+          <div class="skeleton-line narrow"></div>
+        </div>
+        <div class="skeleton-card">
+          <div class="skeleton-line icon"></div>
+          <div class="skeleton-line narrow"></div>
+          <div class="skeleton-line tall"></div>
+          <div class="skeleton-line medium"></div>
+        </div>
+      </section>
+
+      <!-- Results -->
+      <section class="results-section" id="results-section" aria-label="Audit results" aria-live="polite">
+        <div class="section-divider">Audit Report</div>
+
+        <div class="results-header">
+          <h2 class="results-title-heading">SEO Metrics</h2>
+          <div class="results-url" id="results-url-badge">
+            <span class="url-dot" aria-hidden="true"></span>
+            <span id="results-url-text" role="status"></span>
+          </div>
+        </div>
+
+        <!-- Metrics Grid — populated by JS -->
+        <div class="metrics-grid" id="metrics-grid"></div>
+
+        <div class="summary-bar" id="summary-bar">
+          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+          </svg>
+          <span id="summary-text"></span>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ═══ FOOTER ══════════════════════════════════════════════════════════ -->
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <p class="footer-text">
+          <span class="footer-heart" aria-hidden="true">♥</span>
+          Built for
+          <a
+            href="https://digitalheroesco.com"
+            class="footer-link"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Digital Heroes Training Task (opens in new tab)"
+          >Digital Heroes Training Task</a>
+          &nbsp;·&nbsp; Page Pulse &copy; 2025
+        </p>
+      </div>
+    </footer>
+
+  </div><!-- /.app-wrapper -->
+
+  <!-- Visually hidden utility (for screen readers) -->
+  <style>
+    .sr-only {
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+  </style>
+
+  <script src="app.js"></script>
+</body>
+</html>
