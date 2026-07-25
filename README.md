@@ -298,5 +298,5 @@ ISC — see [LICENSE](./LICENSE)
 
 <div align="center">
   <strong>Built for <a href="https://digitalheroesco.com" target="_blank">Digital Heroes Training Task</a></strong><br/>
-  Page Pulse &copy; 2025
+  Page Pulse &copy; 2026
 </div>
